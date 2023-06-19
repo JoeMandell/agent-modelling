@@ -1,6 +1,7 @@
 import mesa
+import random
 
-class SchellingAgent(Agent):
+class SchellingAgent(mesa.Agent):
     #initialize with needed variables - 
     #extends Agent class from Mesa - https://buildmedia.readthedocs.org/media/pdf/mesa/latest/mesa.pdf
     def __init__(self, pos, model, agent_type):
@@ -22,8 +23,9 @@ class SchellingAgent(Agent):
             self.model.happy += 1 #if the agent has enough similar neighbors, it gets happier
 
 
-class Schelling(Model):
-    def __init__(height,width,density,minority_fraction,homophily):
+class Schelling(mesa.Model):
+    import random
+    def __init__(self,height,width,density,minority_fraction,homophily): #PASS SELF AS FIRST ARG DUMBFUCK
         self.height = height
         self.width = width
         self.density = density
@@ -31,7 +33,7 @@ class Schelling(Model):
         self.homophily = homophily
 
         from mesa.space import SingleGrid
-        self.grid = SingleGrid(height,width,torus = true)
+        self.grid = SingleGrid(height,width,torus = True)
 
         from mesa.time import RandomActivation
         self.schedule = RandomActivation(self)
@@ -49,7 +51,7 @@ class Schelling(Model):
                 else:
                     agent_type = 0
                 agent = SchellingAgent((x,y), self, agent_type)
-                self.grid.position_agent(agent, (x, y))
+                self.grid.position_agent(agent, x, y) #tutorial said x and y needed to be passed as a tuple, but they work only as individual ints for me
                 self.schedule.add(agent)
         self.running = True
         self.datacollector.collect(self)
